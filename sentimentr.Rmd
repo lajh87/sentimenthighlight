@@ -1,0 +1,20 @@
+---
+title: "sentimentr"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+---
+
+```{r, warning=FALSE, message = FALSE}
+library(sentimentr)
+library(magrittr)
+library(dplyr)
+source("R/highlight_text.R")
+set.seed(2)
+
+sentiment <- hu_liu_cannon_reviews %>%
+  filter(review_id %in% sample(unique(review_id), 3)) %>%
+  mutate(review = get_sentences(text)) %$%
+  sentiment_by(review, review_id) 
+
+highlight2(sentiment) |>
+  htmltools::HTML()
+```
